@@ -82,7 +82,7 @@ cmd.Parse(sys.argv)
 # CREATE NODES
 
 nodes = ns.network.NodeContainer()
-nodes.Create(6)
+nodes.Create(8)
 
 
 #######################################################################################
@@ -98,25 +98,33 @@ ns.core.Config.SetDefault("ns3::DropTailQueue::MaxPackets", ns.core.UintegerValu
 
 # To connect the point-to-point channels, we need to define NodeContainers for all the
 # point-to-point channels.
-n0n4 = ns.network.NodeContainer()
-n0n4.Add(nodes.Get(0))
-n0n4.Add(nodes.Get(4))
+n0n3 = ns.network.NodeContainer()
+n0n3.Add(nodes.Get(0))
+n0n3.Add(nodes.Get(3))
 
-n1n4 = ns.network.NodeContainer()
-n1n4.Add(nodes.Get(1))
-n1n4.Add(nodes.Get(4))
+n1n3 = ns.network.NodeContainer()
+n1n3.Add(nodes.Get(1))
+n1n3.Add(nodes.Get(3))
 
-n2n5 = ns.network.NodeContainer()
-n2n5.Add(nodes.Get(2))
-n2n5.Add(nodes.Get(5))
-
-n3n5 = ns.network.NodeContainer()
-n3n5.Add(nodes.Get(3))
-n3n5.Add(nodes.Get(5))
+n2n3 = ns.network.NodeContainer()
+n2n3.Add(nodes.Get(2))
+n2n3.Add(nodes.Get(3))
 
 n4n5 = ns.network.NodeContainer()
 n4n5.Add(nodes.Get(4))
 n4n5.Add(nodes.Get(5))
+
+n4n6 = ns.network.NodeContainer()
+n4n6.Add(nodes.Get(4))
+n4n6.Add(nodes.Get(6))
+
+n4n7 = ns.network.NodeContainer()
+n4n7.Add(nodes.Get(4))
+n4n7.Add(nodes.Get(7))
+
+n3n4 = ns.network.NodeContainer()
+n3n4.Add(nodes.Get(3))
+n3n4.Add(nodes.Get(4))
 
 # create point-to-point helper with common attributes
 pointToPoint = ns.point_to_point.PointToPointHelper()
@@ -127,11 +135,13 @@ pointToPoint.SetChannelAttribute("Delay",
                             ns.core.TimeValue(ns.core.MilliSeconds(int(cmd.latency))))
 
 # install network devices for all nodes based on point-to-point links
-d0d4 = pointToPoint.Install(n0n4)
-d1d4 = pointToPoint.Install(n1n4)
-d2d5 = pointToPoint.Install(n2n5)
-d3d5 = pointToPoint.Install(n3n5)
+d0d3 = pointToPoint.Install(n0n3)
+d1d3 = pointToPoint.Install(n1n3)
+d2d3 = pointToPoint.Install(n2n3)
 d4d5 = pointToPoint.Install(n4n5)
+d4d6 = pointToPoint.Install(n4n6)
+d4d7 = pointToPoint.Install(n4n7)
+d3d4 = pointToPoint.Install(n3n4)
 
 # Here we can introduce an error model on the bottle-neck link (from node 4 to 5)
 #em = ns.network.RateErrorModel()
@@ -189,20 +199,27 @@ stack.Install(nodes)
 # Assign IP addresses for net devices
 address = ns.internet.Ipv4AddressHelper()
 
-address.SetBase(ns.network.Ipv4Address("10.1.1.0"), ns.network.Ipv4Mask("255.255.255.0"))
-if0if4 = address.Assign(d0d4)
+address.SetBase(ns.network.Ipv4Address("10.0.2.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if0if3 = address.Assign(d0d3)
 
-address.SetBase(ns.network.Ipv4Address("10.1.2.0"), ns.network.Ipv4Mask("255.255.255.0"))
-if1if4 = address.Assign(d1d4)
+address.SetBase(ns.network.Ipv4Address("10.0.3.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if1if3 = address.Assign(d1d3)
 
-address.SetBase(ns.network.Ipv4Address("10.1.3.0"), ns.network.Ipv4Mask("255.255.255.0"))
-if2if5 = address.Assign(d2d5)
+address.SetBase(ns.network.Ipv4Address("10.0.4.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if2if3 = address.Assign(d2d3)
 
-address.SetBase(ns.network.Ipv4Address("10.1.4.0"), ns.network.Ipv4Mask("255.255.255.0"))
-if3if5 = address.Assign(d3d5)
+address.SetBase(ns.network.Ipv4Address("10.0.1.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if3if4 = address.Assign(d3d4)
 
-address.SetBase(ns.network.Ipv4Address("10.1.5.0"), ns.network.Ipv4Mask("255.255.255.0"))
+address.SetBase(ns.network.Ipv4Address("10.0.5.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if4if5 = address.Assign(d4d5)
+
+address.SetBase(ns.network.Ipv4Address("10.0.6.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if4if6 = address.Assign(d4d6)
+
+address.SetBase(ns.network.Ipv4Address("10.0.7.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if4if7 = address.Assign(d4d7)
+
 
 # Turn on global static routing so we can actually be routed across the network.
 ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
@@ -243,24 +260,32 @@ def SetupTcpConnection(srcNode, dstNode, dstAddr, startTime, stopTime):
   client_apps.Stop(stopTime) 
 
 
-SetupTcpConnection(nodes.Get(0), nodes.Get(2), if2if5.GetAddress(0),
-                   ns.core.Seconds(2.0), ns.core.Seconds(40.0))
-SetupTcpConnection(nodes.Get(1), nodes.Get(3), if3if5.GetAddress(0),
+SetupTcpConnection(nodes.Get(0), nodes.Get(5), if4if5.GetAddress(1),
+                   ns.core.Seconds(20.0), ns.core.Seconds(40.0))
+SetupTcpConnection(nodes.Get(1), nodes.Get(6), if4if6.GetAddress(1),
+                   ns.core.Seconds(20.0), ns.core.Seconds(40.0))
+SetupTcpConnection(nodes.Get(2), nodes.Get(7), if4if7.GetAddress(1),
                    ns.core.Seconds(20.0), ns.core.Seconds(40.0))
 
 
 #######################################################################################
 # CREATE A PCAP PACKET TRACE FILE
 #
-# This line creates two trace files based on the pcap file format. It is a packet
+# This line creates seven trace files based on the pcap file format. It is a packet
 # trace dump in a binary file format. You can use Wireshark to open these files and
 # inspect every transmitted packets. Wireshark can also draw simple graphs based on
 # these files.
 #
-# You will get two files, one for node 0 and one for node 1
+# You will get seven files, each one for every connection
 
-pointToPoint.EnablePcap("sim-tcp", d0d4.Get(0), True)
-pointToPoint.EnablePcap("sim-tcp", d1d4.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp", d0d3.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp", d1d3.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp", d2d3.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp3-4", d3d4.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp", d4d5.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp", d4d6.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp", d4d7.Get(0), True)
+
 
 
 #######################################################################################
@@ -282,6 +307,7 @@ monitor = flowmon_helper.InstallAll()
 
 ns.core.Simulator.Stop(ns.core.Seconds(50.0))
 ns.core.Simulator.Run()
+
 
 
 #######################################################################################
@@ -315,4 +341,5 @@ for flow_id, flow_stats in monitor.GetFlowStats():
 
 
 # This is what we want to do last
+print nodes.Get(3).GetDevice(0).
 ns.core.Simulator.Destroy()
