@@ -13,7 +13,7 @@
 # - All links are point-to-point with data rate 500kb/s and propagation delay 2ms
 #
 # Two data flows (and their applications are created):
-# - A TCP flow form n0 to n2
+# - A UDP flow form n0 to n2
 # - A TCP flow from n1 to n3
 
 import sys
@@ -23,6 +23,7 @@ import ns.internet
 import ns.network
 import ns.point_to_point
 import ns.flow_monitor
+import time
 
 #######################################################################################
 # SEEDING THE RNG
@@ -285,9 +286,11 @@ SetupTcpConnection(nodes.Get(1), nodes.Get(3), if3if5.GetAddress(0),
 #
 # You will get two files, one for node 0 and one for node 1
 
-pointToPoint.EnablePcap("sim-tcp", d0d4.Get(0), True)
-pointToPoint.EnablePcap("sim-tcp", d1d4.Get(0), True)
-
+pointToPoint.EnablePcap("sim-udp04", d0d4.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp14", d1d4.Get(0), True)
+pointToPoint.EnablePcap("sim-tcpudp", d4d5.Get(0), True)
+pointToPoint.EnablePcap("sim-udp52", d5d2.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp53", d5d3.Get(0), True)
 
 #######################################################################################
 # FLOW MONITOR
