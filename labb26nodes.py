@@ -69,7 +69,7 @@ import time
 
 cmd = ns.core.CommandLine()
 
-# Default values
+# Default TCP
 cmd.latency = 1
 cmd.rate = 500000
 cmd.on_off_rate = 300000
@@ -77,6 +77,8 @@ cmd.AddValue ("rate", "P2P data rate in bps")
 cmd.AddValue ("latency", "P2P link Latency in miliseconds")
 cmd.AddValue ("on_off_rate", "OnOffApplication data sending rate")
 cmd.Parse(sys.argv)
+
+
 
 
 #######################################################################################
@@ -215,6 +217,15 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 # client to connect to the server, and start generating 100 packets with a
 # deterministic inter-arrival time.
 
+# Default UDP
+cmd.latency = 1
+cmd.rate = 500000
+cmd.interval = 0.01
+cmd.AddValue ("latency", "P2P link Latency in miliseconds")
+cmd.AddValue ("rate", "P2P data rate in bps")
+cmd.AddValue ("interval", "UDP client packet interval")
+cmd.Parse(sys.argv)
+
 # Create the server on port 9. Put it on node 0, and start it at time 1.0s.
 echoServer = ns.applications.UdpEchoServerHelper(9)
 serverApps = echoServer.Install(nodes.Get(0))
@@ -223,16 +234,18 @@ serverApps.Stop(ns.core.Seconds(10.0))
 
 # Create the client application and connect it to node 1 and port 9. Configure number
 # of packets, packet sizes, inter-arrival interval.
-echoClient = ns.applications.UdpEchoClientHelper(interfaces.GetAddress(1), 9)
+# Put the echo server on node 0
+echoClient = ns.applications.UdpEchoClientHelper(if1if4.GetAddress(0), 9)
 echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(100))
 echoClient.SetAttribute("Interval",
                         ns.core.TimeValue(ns.core.Seconds (float(cmd.interval))))
 echoClient.SetAttribute("PacketSize", ns.core.UintegerValue(1024))
 
 # Put the client on node 2 and start sending at time 2.0s.
-clientApps = echoClient.Install(nodes.Get(2))
-clientApps.Start(ns.core.Seconds(2.0))
-clientApps.Stop(ns.core.Seconds(10.0))
+client_UDP_apps = echoClient.Install(nodes.Get(2))
+client_UDP_apps.Start(ns.core.Seconds(2.0))
+client_UDP_apps.Stop(ns.core.Seconds(10.0))
+
 
 
 #######################################################################################
@@ -265,9 +278,10 @@ def SetupTcpConnection(srcNode, dstNode, dstAddr, startTime, stopTime):
   #                      ns.core.StringValue("ns3::ExponentialRandomVariable[Mean=2]"))
 
   # Install the client on node srcNode
-  client_apps = on_off_tcp_helper.Install(srcNode)
-  client_apps.Start(startTime)
-  client_apps.Stop(stopTime) 
+  client_TCP_apps = on_off_tcp_helper.Install(srcNode)
+  client_TCP_apps.Start(startTime)
+  client_TCP_apps.Stop(stopTime) 
+
 
 
 #SetupTcpConnection(nodes.Get(0), nodes.Get(2), if2if5.GetAddress(0),
@@ -289,8 +303,8 @@ SetupTcpConnection(nodes.Get(1), nodes.Get(3), if3if5.GetAddress(0),
 pointToPoint.EnablePcap("sim-udp04", d0d4.Get(0), True)
 pointToPoint.EnablePcap("sim-tcp14", d1d4.Get(0), True)
 pointToPoint.EnablePcap("sim-tcpudp", d4d5.Get(0), True)
-pointToPoint.EnablePcap("sim-udp52", d5d2.Get(0), True)
-pointToPoint.EnablePcap("sim-tcp53", d5d3.Get(0), True)
+pointToPoint.EnablePcap("sim-udp25", d2d5.Get(0), True)
+pointToPoint.EnablePcap("sim-tcp35", d3d5.Get(0), True)
 
 #######################################################################################
 # FLOW MONITOR
@@ -302,12 +316,13 @@ pointToPoint.EnablePcap("sim-tcp53", d5d3.Get(0), True)
 
 flowmon_helper = ns.flow_monitor.FlowMonitorHelper()
 monitor = flowmon_helper.InstallAll()
-
+  
 
 #######################################################################################
 # RUN THE SIMULATION
 #
 # We have to set stop time, otherwise the flowmonitor causes simulation to run forever
+
 
 ns.core.Simulator.Stop(ns.core.Seconds(50.0))
 ns.core.Simulator.Run()
