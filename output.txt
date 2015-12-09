@@ -405,3 +405,107 @@ FlowID: 4 (UDP 10.1.3.1/8080 --> 10.1.1.1/49153)
   Throughput: 0.008441 Mbps
 
 
+Rate 500.000
+FlowID: 1 (TCP 10.1.2.1/49153 --> 10.1.4.1/80)
+  Tx Bytes: 3420
+  Rx Bytes: 3420
+  Lost Pkt: 0
+  Flow active: 2.000000s - 40.085368s
+  Throughput: 0.000685 Mbps
+FlowID: 2 (UDP 10.1.1.1/49153 --> 10.1.3.1/8080)
+  Tx Bytes: 3997600
+  Rx Bytes: 2374364
+  Lost Pkt: 1543
+  Flow active: 2.000000s - 40.151960s
+  Throughput: 0.474811 Mbps
+FlowID: 3 (TCP 10.1.4.1/80 --> 10.1.2.1/49153)
+  Tx Bytes: 316
+  Rx Bytes: 316
+  Lost Pkt: 0
+  Flow active: 2.005784s - 40.073232s
+  Throughput: 0.000063 Mbps
+FlowID: 4 (UDP 10.1.3.1/8080 --> 10.1.1.1/49153)
+  Tx Bytes: 2364896
+  Rx Bytes: 2364896
+  Lost Pkt: 0
+  Flow active: 2.053592s - 40.052912s
+  Throughput: 0.474817 Mbps
+
+  Rate 500.000 onoffrate 100.000
+  FlowID: 1 (TCP 10.1.2.1/49153 --> 10.1.4.1/80)
+  Tx Bytes: 31460
+  Rx Bytes: 15732
+  Lost Pkt: 17
+  Flow active: 2.000000s - 4.452984s
+  Throughput: 0.048930 Mbps
+FlowID: 2 (UDP 10.1.1.1/49153 --> 10.1.3.1/8080)
+  Tx Bytes: 3997600
+  Rx Bytes: 2364896
+  Lost Pkt: 1552
+  Flow active: 2.000000s - 40.197496s
+  Throughput: 0.472354 Mbps
+FlowID: 3 (TCP 10.1.4.1/80 --> 10.1.2.1/49153)
+  Tx Bytes: 784
+  Rx Bytes: 784
+  Lost Pkt: 0
+  Flow active: 2.005784s - 40.016720s
+  Throughput: 0.000157 Mbps
+FlowID: 4 (UDP 10.1.3.1/8080 --> 10.1.1.1/49153)
+  Tx Bytes: 2352272
+  Rx Bytes: 2352272
+  Lost Pkt: 0
+  Flow active: 2.053592s - 40.049584s
+  Throughput: 0.472324 Mbps
+
+Rate 500.000 onoffrate 10.000
+
+FlowID: 1 (TCP 10.1.2.1/49153 --> 10.1.4.1/80)
+  Tx Bytes: 42260
+  Rx Bytes: 32844
+  Lost Pkt: 10
+  Flow active: 2.000000s - 45.085728s
+  Throughput: 0.005816 Mbps
+FlowID: 2 (UDP 10.1.1.1/49153 --> 10.1.3.1/8080)
+  Tx Bytes: 3997600
+  Rx Bytes: 2371208
+  Lost Pkt: 1546
+  Flow active: 2.000000s - 40.197464s
+  Throughput: 0.473615 Mbps
+FlowID: 3 (TCP 10.1.4.1/80 --> 10.1.2.1/49153)
+  Tx Bytes: 1148
+  Rx Bytes: 1148
+  Lost Pkt: 0
+  Flow active: 2.005784s - 45.080712s
+  Throughput: 0.000203 Mbps
+FlowID: 4 (UDP 10.1.3.1/8080 --> 10.1.1.1/49153)
+  Tx Bytes: 2358584
+  Rx Bytes: 2358584
+  Lost Pkt: 0
+  Flow active: 2.053592s - 40.049552s
+  Throughput: 0.473592 Mbps
+
+Rate 500.000 onoffrate 1.000
+FlowID: 1 (TCP 10.1.2.1/49153 --> 10.1.4.1/80)
+  Tx Bytes: 42260
+  Rx Bytes: 32844
+  Lost Pkt: 10
+  Flow active: 2.000000s - 45.085728s
+  Throughput: 0.005816 Mbps
+FlowID: 2 (UDP 10.1.1.1/49153 --> 10.1.3.1/8080)
+  Tx Bytes: 3997600
+  Rx Bytes: 2371208
+  Lost Pkt: 1546
+  Flow active: 2.000000s - 40.197464s
+  Throughput: 0.473615 Mbps
+FlowID: 3 (TCP 10.1.4.1/80 --> 10.1.2.1/49153)
+  Tx Bytes: 1148
+  Rx Bytes: 1148
+  Lost Pkt: 0
+  Flow active: 2.005784s - 45.080712s
+  Throughput: 0.000203 Mbps
+FlowID: 4 (UDP 10.1.3.1/8080 --> 10.1.1.1/49153)
+  Tx Bytes: 2358584
+  Rx Bytes: 2358584
+  Lost Pkt: 0
+  Flow active: 2.053592s - 40.049552s
+  Throughput: 0.473592 Mbps
