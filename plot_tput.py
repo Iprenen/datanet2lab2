@@ -64,7 +64,7 @@ def onMatchThroughputData(o_matchobj):
 
 def MakePlot(s_data_file_1):
     o_log_parser = LogParser()
-    o_log_parser.AddHandler("\|\s+(\d+.\d+)\s<>\s+\d+.\d+\s\|\s+\d+\s\|\s+(\d+)\s\|",
+    o_log_parser.AddHandler("\|\s+(\d+)\s<>\s+\d+\s\|\s+\d+\s\|\s+(\d+)\s\|",
                             onMatchThroughputData)
     o_log_parser.ParseFile(s_data_file_1)
 

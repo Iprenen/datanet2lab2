@@ -44,7 +44,7 @@ import time
 
 
 #ns.core.LogComponentEnable("UdpEchoClientApplication", ns.core.LOG_LEVEL_INFO)
-ns.core.LogComponentEnable("UdpEchoServerApplication", ns.core.LOG_LEVEL_INFO)
+#ns.core.LogComponentEnable("UdpEchoServerApplication", ns.core.LOG_LEVEL_INFO)
 #ns.core.LogComponentEnable("PointToPointNetDevice", ns.core.LOG_LEVEL_ALL)
 #ns.core.LogComponentEnable("DropTailQueue", ns.core.LOG_LEVEL_LOGIC)
 #ns.core.LogComponentEnable("OnOffApplication", ns.core.LOG_LEVEL_INFO)
@@ -228,23 +228,23 @@ cmd.Parse(sys.argv)
 
 # Create the server on port 9. Put it on node 0, and start it at time 1.0s.
 echoServer = ns.applications.UdpEchoServerHelper(9)
-serverApps = echoServer.Install(nodes.Get(0))
+serverApps = echoServer.Install(nodes.Get(2))
 serverApps.Start(ns.core.Seconds(1.0))
-serverApps.Stop(ns.core.Seconds(10.0))
+serverApps.Stop(ns.core.Seconds(40.0))
 
 # Create the client application and connect it to node 1 and port 9. Configure number
 # of packets, packet sizes, inter-arrival interval.
 # Put the echo server on node 0
-echoClient = ns.applications.UdpEchoClientHelper(if1if4.GetAddress(0), 9)
+echoClient = ns.applications.UdpEchoClientHelper(if2if5.GetAddress(2), 9)
 echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(100))
 echoClient.SetAttribute("Interval",
                         ns.core.TimeValue(ns.core.Seconds (float(cmd.interval))))
 echoClient.SetAttribute("PacketSize", ns.core.UintegerValue(1024))
 
 # Put the client on node 2 and start sending at time 2.0s.
-client_UDP_apps = echoClient.Install(nodes.Get(2))
+client_UDP_apps = echoClient.Install(nodes.Get(0))
 client_UDP_apps.Start(ns.core.Seconds(2.0))
-client_UDP_apps.Stop(ns.core.Seconds(10.0))
+client_UDP_apps.Stop(ns.core.Seconds(40.0))
 
 
 
@@ -259,22 +259,22 @@ def SetupTcpConnection(srcNode, dstNode, dstAddr, startTime, stopTime):
   # Create a TCP sink at dstNode
   packet_sink_helper = ns.applications.PacketSinkHelper("ns3::TcpSocketFactory", 
                           ns.network.InetSocketAddress(ns.network.Ipv4Address.GetAny(), 
-                                                       8080))
+                                                       80))
   sink_apps = packet_sink_helper.Install(dstNode)
   sink_apps.Start(ns.core.Seconds(2.0))
-  sink_apps.Stop(ns.core.Seconds(50.0)) 
+  sink_apps.Stop(ns.core.Seconds(40.0)) 
 
   # Create TCP connection from srcNode to dstNode 
   on_off_tcp_helper = ns.applications.OnOffHelper("ns3::TcpSocketFactory", 
-                          ns.network.Address(ns.network.InetSocketAddress(dstAddr, 8080)))
+                          ns.network.Address(ns.network.InetSocketAddress(dstAddr, 80)))
   on_off_tcp_helper.SetAttribute("DataRate",
                       ns.network.DataRateValue(ns.network.DataRate(int(cmd.on_off_rate))))
   on_off_tcp_helper.SetAttribute("PacketSize", ns.core.UintegerValue(1500)) 
   on_off_tcp_helper.SetAttribute("OnTime",
                       ns.core.StringValue("ns3::ConstantRandomVariable[Constant=2]"))
   on_off_tcp_helper.SetAttribute("OffTime",
-                        ns.core.StringValue("ns3::ConstantRandomVariable[Constant=1]"))
-  #                      ns.core.StringValue("ns3::UniformRandomVariable[Min=1,Max=2]"))
+                        #ns.core.StringValue("ns3::ConstantRandomVariable[Constant=1]"))
+                        ns.core.StringValue("ns3::UniformRandomVariable[Min=1,Max=2]"))
   #                      ns.core.StringValue("ns3::ExponentialRandomVariable[Mean=2]"))
 
   # Install the client on node srcNode
