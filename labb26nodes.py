@@ -71,7 +71,7 @@ cmd = ns.core.CommandLine()
 
 # Default TCP
 cmd.latency = 1
-cmd.rate = 500000
+cmd.rate = 100000
 cmd.on_off_rate = 300000
 cmd.AddValue ("rate", "P2P data rate in bps")
 cmd.AddValue ("latency", "P2P link Latency in miliseconds")
@@ -219,7 +219,7 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
 # Default UDP
 cmd.latency = 1
-cmd.rate = 500000
+cmd.rate = 100000
 cmd.interval = 0.01
 cmd.AddValue ("latency", "P2P link Latency in miliseconds")
 cmd.AddValue ("rate", "P2P data rate in bps")
