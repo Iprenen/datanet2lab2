@@ -219,7 +219,7 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
 # Default UDP
 cmd.latency = 1
-cmd.rate = 500000
+cmd.rate = 5000000
 cmd.interval = 0.01
 cmd.AddValue ("latency", "P2P link Latency in miliseconds")
 cmd.AddValue ("rate", "P2P data rate in bps")
