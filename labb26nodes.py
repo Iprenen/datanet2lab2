@@ -71,7 +71,7 @@ cmd = ns.core.CommandLine()
 
 # Default TCP
 cmd.latency = 1
-cmd.rate = 5000000
+cmd.rate = 500000
 cmd.on_off_rate = 300000
 cmd.AddValue ("rate", "P2P data rate in bps")
 cmd.AddValue ("latency", "P2P link Latency in miliseconds")
@@ -219,7 +219,7 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
 # Default UDP
 cmd.latency = 1
-cmd.rate = 5000000
+cmd.rate = 500000
 cmd.interval = 0.01
 cmd.AddValue ("latency", "P2P link Latency in miliseconds")
 cmd.AddValue ("rate", "P2P data rate in bps")
@@ -236,7 +236,7 @@ serverApps.Stop(ns.core.Seconds(40.0))
 # of packets, packet sizes, inter-arrival interval.
 # Put the echo server on node 0
 echoClient = ns.applications.UdpEchoClientHelper(if2if5.GetAddress(0), 8080)
-echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(4000))
+echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(40000))
 echoClient.SetAttribute("Interval",
                         ns.core.TimeValue(ns.core.Seconds (float(cmd.interval))))
 echoClient.SetAttribute("PacketSize", ns.core.UintegerValue(1024))
