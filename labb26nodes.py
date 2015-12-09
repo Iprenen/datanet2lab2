@@ -71,7 +71,7 @@ cmd = ns.core.CommandLine()
 
 # Default TCP
 cmd.latency = 1
-cmd.rate = 500000
+cmd.rate = 1000000
 cmd.on_off_rate = 300000
 cmd.AddValue ("rate", "P2P data rate in bps")
 cmd.AddValue ("latency", "P2P link Latency in miliseconds")
@@ -219,15 +219,15 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
 # Default UDP
 cmd.latency = 1
-cmd.rate = 500000
+cmd.rate = 1000000
 cmd.interval = 0.01
 cmd.AddValue ("latency", "P2P link Latency in miliseconds")
 cmd.AddValue ("rate", "P2P data rate in bps")
 cmd.AddValue ("interval", "UDP client packet interval")
 cmd.Parse(sys.argv)
 
-# Create the server on port 9. Put it on node 0, and start it at time 1.0s.
-echoServer = ns.applications.UdpEchoServerHelper(9)
+# Create the server on port 9. Put it on node 2, and start it at time 1.0s.
+echoServer = ns.applications.UdpEchoServerHelper(8080)
 serverApps = echoServer.Install(nodes.Get(2))
 serverApps.Start(ns.core.Seconds(1.0))
 serverApps.Stop(ns.core.Seconds(40.0))
@@ -235,13 +235,13 @@ serverApps.Stop(ns.core.Seconds(40.0))
 # Create the client application and connect it to node 1 and port 9. Configure number
 # of packets, packet sizes, inter-arrival interval.
 # Put the echo server on node 0
-echoClient = ns.applications.UdpEchoClientHelper(if2if5.GetAddress(2), 9)
-echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(100))
+echoClient = ns.applications.UdpEchoClientHelper(if2if5.GetAddress(0), 8080)
+echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(4000))
 echoClient.SetAttribute("Interval",
                         ns.core.TimeValue(ns.core.Seconds (float(cmd.interval))))
 echoClient.SetAttribute("PacketSize", ns.core.UintegerValue(1024))
 
-# Put the client on node 2 and start sending at time 2.0s.
+# Put the client on node 0 and start sending at time 2.0s.
 client_UDP_apps = echoClient.Install(nodes.Get(0))
 client_UDP_apps.Start(ns.core.Seconds(2.0))
 client_UDP_apps.Stop(ns.core.Seconds(40.0))
