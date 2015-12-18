@@ -85,7 +85,7 @@ cmd.Parse(sys.argv)
 # CREATE NODES
 
 nodes = ns.network.NodeContainer()
-nodes.Create(6)
+nodes.Create(8)
 
 
 #######################################################################################
@@ -109,6 +109,10 @@ n1n4 = ns.network.NodeContainer()
 n1n4.Add(nodes.Get(1))
 n1n4.Add(nodes.Get(4))
 
+n6n4 = ns.network.NodeContainer()
+n6n4.Add(nodes.Get(6))
+n6n4.Add(nodes.Get(4))
+
 n2n5 = ns.network.NodeContainer()
 n2n5.Add(nodes.Get(2))
 n2n5.Add(nodes.Get(5))
@@ -117,9 +121,14 @@ n3n5 = ns.network.NodeContainer()
 n3n5.Add(nodes.Get(3))
 n3n5.Add(nodes.Get(5))
 
+n7n5 = ns.network.NodeContainer()
+n7n5.Add(nodes.Get(7))
+n7n5.Add(nodes.Get(5))
+
 n4n5 = ns.network.NodeContainer()
 n4n5.Add(nodes.Get(4))
 n4n5.Add(nodes.Get(5))
+
 
 # create point-to-point helper with common attributes
 pointToPoint = ns.point_to_point.PointToPointHelper()
@@ -132,9 +141,12 @@ pointToPoint.SetChannelAttribute("Delay",
 # install network devices for all nodes based on point-to-point links
 d0d4 = pointToPoint.Install(n0n4)
 d1d4 = pointToPoint.Install(n1n4)
+d6d4 = pointToPoint.Install(n6n4)
 d2d5 = pointToPoint.Install(n2n5)
 d3d5 = pointToPoint.Install(n3n5)
+d7d5 = pointToPoint.Install(n7n5)
 d4d5 = pointToPoint.Install(n4n5)
+
 
 # Here we can introduce an error model on the bottle-neck link (from node 4 to 5)
 #em = ns.network.RateErrorModel()
@@ -198,14 +210,23 @@ if0if4 = address.Assign(d0d4)
 address.SetBase(ns.network.Ipv4Address("10.1.2.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if1if4 = address.Assign(d1d4)
 
+address.SetBase(ns.network.Ipv4Address("10.1.6.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if6if4 = address.Assign(d6d4)
+
 address.SetBase(ns.network.Ipv4Address("10.1.3.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if2if5 = address.Assign(d2d5)
 
 address.SetBase(ns.network.Ipv4Address("10.1.4.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if3if5 = address.Assign(d3d5)
 
+address.SetBase(ns.network.Ipv4Address("10.1.7.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if7if5 = address.Assign(d7d5)
+
 address.SetBase(ns.network.Ipv4Address("10.1.5.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if4if5 = address.Assign(d4d5)
+
+
+
 
 # Turn on global static routing so we can actually be routed across the network.
 ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
@@ -287,6 +308,9 @@ def SetupTcpConnection(srcNode, dstNode, dstAddr, startTime, stopTime):
 #SetupTcpConnection(nodes.Get(0), nodes.Get(2), if2if5.GetAddress(0),
 #                   ns.core.Seconds(2.0), ns.core.Seconds(40.0))
 SetupTcpConnection(nodes.Get(1), nodes.Get(3), if3if5.GetAddress(0),
+                   ns.core.Seconds(2.0), ns.core.Seconds(40.0))
+
+SetupTcpConnection(nodes.Get(7), nodes.Get(6), if6if4.GetAddress(0),
                    ns.core.Seconds(2.0), ns.core.Seconds(40.0))
 
 
