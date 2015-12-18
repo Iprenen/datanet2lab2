@@ -1,0 +1,7 @@
+Get more nodes,  more data
+
+More data for calculating confidence interval
+Lägg till mer TCP, alternativa rounting vägar
+Finns det en sweetspot? 
+Service level agreement
+Slides om exponentioll cvd eller liknande (antagligen formler)
