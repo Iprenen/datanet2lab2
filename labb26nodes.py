@@ -85,7 +85,7 @@ cmd.Parse(sys.argv)
 # CREATE NODES
 
 nodes = ns.network.NodeContainer()
-nodes.Create(8)
+nodes.Create(10)
 
 
 #######################################################################################
@@ -113,6 +113,18 @@ n6n4 = ns.network.NodeContainer()
 n6n4.Add(nodes.Get(6))
 n6n4.Add(nodes.Get(4))
 
+n0n8 = ns.network.NodeContainer()
+n0n8.Add(nodes.Get(0))
+n0n8.Add(nodes.Get(8))
+
+n1n8 = ns.network.NodeContainer()
+n1n8.Add(nodes.Get(1))
+n1n8.Add(nodes.Get(8))
+
+n6n8 = ns.network.NodeContainer()
+n6n8.Add(nodes.Get(6))
+n6n8.Add(nodes.Get(8))
+
 n2n5 = ns.network.NodeContainer()
 n2n5.Add(nodes.Get(2))
 n2n5.Add(nodes.Get(5))
@@ -125,9 +137,33 @@ n7n5 = ns.network.NodeContainer()
 n7n5.Add(nodes.Get(7))
 n7n5.Add(nodes.Get(5))
 
+n2n9 = ns.network.NodeContainer()
+n2n9.Add(nodes.Get(2))
+n2n9.Add(nodes.Get(9))
+
+n3n9 = ns.network.NodeContainer()
+n3n9.Add(nodes.Get(3))
+n3n9.Add(nodes.Get(9))
+
+n7n9 = ns.network.NodeContainer()
+n7n9.Add(nodes.Get(7))
+n7n9.Add(nodes.Get(9))
+
 n4n5 = ns.network.NodeContainer()
 n4n5.Add(nodes.Get(4))
 n4n5.Add(nodes.Get(5))
+
+n4n9 = ns.network.NodeContainer()
+n4n9.Add(nodes.Get(4))
+n4n9.Add(nodes.Get(9))
+
+n8n5 = ns.network.NodeContainer()
+n8n5.Add(nodes.Get(8))
+n8n5.Add(nodes.Get(5))
+
+n8n9 = ns.network.NodeContainer()
+n8n9.Add(nodes.Get(8))
+n8n9.Add(nodes.Get(9))
 
 
 # create point-to-point helper with common attributes
@@ -142,10 +178,19 @@ pointToPoint.SetChannelAttribute("Delay",
 d0d4 = pointToPoint.Install(n0n4)
 d1d4 = pointToPoint.Install(n1n4)
 d6d4 = pointToPoint.Install(n6n4)
+d0d8 = pointToPoint.Install(n0n8)
+d1d8 = pointToPoint.Install(n1n8)
+d6d8 = pointToPoint.Install(n6n8)
 d2d5 = pointToPoint.Install(n2n5)
 d3d5 = pointToPoint.Install(n3n5)
 d7d5 = pointToPoint.Install(n7n5)
+d2d9 = pointToPoint.Install(n2n9)
+d3d9 = pointToPoint.Install(n3n9)
+d7d9 = pointToPoint.Install(n7n9)
 d4d5 = pointToPoint.Install(n4n5)
+d4d9 = pointToPoint.Install(n4n9)
+d8d5 = pointToPoint.Install(n8n5)
+d8d9 = pointToPoint.Install(n8n9)
 
 
 # Here we can introduce an error model on the bottle-neck link (from node 4 to 5)
@@ -213,6 +258,15 @@ if1if4 = address.Assign(d1d4)
 address.SetBase(ns.network.Ipv4Address("10.1.6.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if6if4 = address.Assign(d6d4)
 
+address.SetBase(ns.network.Ipv4Address("10.1.8.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if0if8 = address.Assign(d0d8)
+
+address.SetBase(ns.network.Ipv4Address("10.1.9.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if1if8 = address.Assign(d1d8)
+
+address.SetBase(ns.network.Ipv4Address("10.1.10.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if6if8 = address.Assign(d6d8)
+
 address.SetBase(ns.network.Ipv4Address("10.1.3.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if2if5 = address.Assign(d2d5)
 
@@ -222,8 +276,26 @@ if3if5 = address.Assign(d3d5)
 address.SetBase(ns.network.Ipv4Address("10.1.7.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if7if5 = address.Assign(d7d5)
 
+address.SetBase(ns.network.Ipv4Address("10.1.11.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if2if9 = address.Assign(d2d9)
+
+address.SetBase(ns.network.Ipv4Address("10.1.12.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if3if9 = address.Assign(d3d9)
+
+address.SetBase(ns.network.Ipv4Address("10.1.13.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if7if9 = address.Assign(d7d9)
+
 address.SetBase(ns.network.Ipv4Address("10.1.5.0"), ns.network.Ipv4Mask("255.255.255.0"))
 if4if5 = address.Assign(d4d5)
+
+address.SetBase(ns.network.Ipv4Address("10.1.14.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if4if9 = address.Assign(d4d9)
+
+address.SetBase(ns.network.Ipv4Address("10.1.15.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if8if5 = address.Assign(d8d5)
+
+address.SetBase(ns.network.Ipv4Address("10.1.16.0"), ns.network.Ipv4Mask("255.255.255.0"))
+if8if9 = address.Assign(d8d9)
 
 
 
